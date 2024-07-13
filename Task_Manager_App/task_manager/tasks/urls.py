@@ -1,8 +1,13 @@
-from .views import TaskListCreateAPIView, TaskRetrieveUpdateDestroyAPIView
-from django.urls import path
+from .views import TaskListCreateAPIView, TaskRetrieveUpdateDestroyAPIView, TaskViewSet
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
 
+router = DefaultRouter()
+router.register(r'tasks', TaskViewSet)
+
 urlpatterns = [
+    path('', include(router.urls)),
     path('', views.task_list, name='task_list'),
     path('<int:pk>/', views.task_detail, name='task_detail'),
     path('create/', views.task_create, name='task_create'),
@@ -10,4 +15,5 @@ urlpatterns = [
     path('<int:pk>/delete/', views.task_delete, name='task_delete'),
     path('tasks/', TaskListCreateAPIView.as_view(), name='task-list-create'),
     path('tasks/<int:pk>/', TaskRetrieveUpdateDestroyAPIView.as_view(), name='task-detail'),
+    path('api/', include(router.urls)),
 ]
