@@ -1,12 +1,11 @@
 import React from 'react';
-import './Footer.css';
 
-function Footer() {
+const Footer = () => {
   return (
-    <div className="footer" id="footer">
-      <p>Task Manager App &copy; 2024</p>
+    <div className="footer">
+      <p>&copy; 2024 Task Manager App</p>
     </div>
   );
-}
+};
 
 export default Footer;

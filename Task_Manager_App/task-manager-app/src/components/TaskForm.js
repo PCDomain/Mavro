@@ -1,54 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import './TaskForm.css';
+import React, { useState } from 'react';
 
-function TaskForm({ addTask, editingTask }) {
+const TaskForm = ({ addTask }) => {
   const [task, setTask] = useState('');
-  const [description, setDescription] = useState('');
-
-  useEffect(() => {
-    if (editingTask) {
-      setTask(editingTask.task);
-      setDescription(editingTask.description);
-    } else {
-      setTask('');
-      setDescription('');
-    }
-  }, [editingTask]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addTask({ task, description });
-    setTask('');
-    setDescription('');
+    if (task.trim()) {
+      addTask(task);
+      setTask({ title: '' });
+    }
   };
 
   return (
-    <div className="taskform" id="taskform">
-      <h2>{editingTask ? 'Edit Task' : 'Task Form'}</h2>
+    <div className="task-form">
+      <div className="banner">Add Task</div>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="task">Task:</label>
-          <input
-            type="text"
-            id="task"
-            name="task"
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="description">Description:</label>
-          <textarea
-            id="description"
-            name="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          ></textarea>
-        </div>
-        <button type="submit">{editingTask ? 'Update Task' : 'Add Task'}</button>
+        <input
+          type="text"
+          value={task.title}
+          onChange={(e) => setTask({ ...task, title: e.target.value })}
+          placeholder="Enter a new task"
+          style={{ width: '100%', padding: '10px', margin: '10px 0' }}
+        />
+        <button type="submit" style={{ width: '100%' }}>Add Task</button>
       </form>
     </div>
   );
-}
+};
 
 export default TaskForm;

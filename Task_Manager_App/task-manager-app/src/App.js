@@ -1,72 +1,61 @@
-import React, { useState } from 'react';
-import { Navbar, Container, Nav, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import Footer from './components/Footer';
-import './App.css';
+import { fetchTasks, addTask, deleteTask, updateTask } from './api';
+import './index.css';
 
-function App() {
-  const [showSidebar, setShowSidebar] = useState(false);
+const App = () => {
   const [tasks, setTasks] = useState([]);
-  const [editingTask, setEditingTask] = useState(null);
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  useEffect(() => {
+    fetchTasks()
+      .then(response => setTasks(response.data))
+      .catch(error => console.error('Error fetching tasks:', error));
+  }, []);
+
+  const handleAddTask = (task) => {
+    addTask(task)
+      .then(response => setTasks([...tasks, response.data]))
+      .catch(error => console.error('Error adding task:', error));
+  };
+
+  const handleDeleteTask = (id) => {
+    deleteTask(id)
+      .then(() => setTasks(tasks.filter(task => task.id !== id)))
+      .catch(error => console.error('Error deleting task:', error));
+  };
+
+  const handleUpdateTask = (id, updatedTask) => {
+    updateTask(id, updatedTask)
+      .then(response => {
+        const updatedTasks = tasks.map(task => (task.id === id ? response.data : task));
+        setTasks(updatedTasks);
+      })
+      .catch(error => console.error('Error updating task:', error));
+  };
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
   };
 
-  const addTask = (task) => {
-    if (editingTask !== null) {
-      const updatedTasks = tasks.map((t, index) => 
-        index === editingTask ? task : t
-      );
-      setTasks(updatedTasks);
-      setEditingTask(null);
-    } else {
-      setTasks([...tasks, task]);
-    }
-  };
-
-  const deleteTask = (index) => {
-    const updatedTasks = tasks.filter((_, i) => i !== index);
-    setTasks(updatedTasks);
-  };
-
-  const editTask = (index) => {
-    setEditingTask(index);
-  };
-
   return (
-    <div className={`App ${showSidebar ? 'sidebar-open' : ''}`}>
-      <Navbar bg="dark" variant="dark" className="main-navbar" fixed="top">
-        <Container>
-          <Button variant="outline-light" onClick={toggleSidebar} className="sidebar-toggle-btn">
-            ☰
-          </Button>
-          <Navbar.Brand href="#home">Task Manager</Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="#header">Header</Nav.Link>
-            <Nav.Link href="#taskform">TaskForm</Nav.Link>
-            <Nav.Link href="#footer">Footer</Nav.Link>
-          </Nav>
-        </Container>
-      </Navbar>
-      <Sidebar showSidebar={showSidebar} />
-      <Container className="content">
-        <Header />
-        <div className="section-banner">Task Form</div>
-        <TaskForm addTask={addTask} editingTask={editingTask !== null ? tasks[editingTask] : null} />
-        {tasks.length > 0 && (
-          <>
-            <div className="section-banner">Task List</div>
-            <TaskList tasks={tasks} deleteTask={deleteTask} editTask={editTask} />
-          </>
-        )}
-        <Footer />
-      </Container>
-    </div>
+    <>
+      <Header />
+      <button className="toggle-btn" onClick={toggleSidebar}>☰</button>
+      <div className="main-container">
+        <Sidebar showSidebar={showSidebar} />
+        <div className={`content ${showSidebar ? 'expanded' : ''}`}>
+          <TaskForm addTask={handleAddTask} />
+          <TaskList tasks={tasks} deleteTask={handleDeleteTask} updateTask={handleUpdateTask} />
+        </div>
+      </div>
+      <Footer />
+    </>
   );
-}
+};
 
 export default App;

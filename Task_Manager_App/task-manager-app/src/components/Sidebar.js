@@ -1,17 +1,17 @@
 import React from 'react';
-import './Sidebar.css';
 
-function Sidebar({ showSidebar }) {
+const Sidebar = ({ showSidebar }) => {
   return (
-    <div className={`sidebar ${showSidebar ? 'open' : ''}`}>
-      <h2>Navigation</h2>
+    <div className={`sidebar ${showSidebar ? 'show' : ''}`}>
       <ul>
-        <li><a href="#header">Header</a></li>
-        <li><a href="#taskform">TaskForm</a></li>
-        <li><a href="#footer">Footer</a></li>
+        <li>Current Projects</li>
+        <li>Recent Projects</li>
+        <li>Deleted Projects</li>
+        <li>Add Notes</li>
+        <li>Progress</li>
       </ul>
     </div>
   );
-}
+};
 
 export default Sidebar;
