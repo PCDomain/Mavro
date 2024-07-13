@@ -25,7 +25,7 @@ def home_view(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),
+    # path('accounts/', include('accounts.urls')),
     path('accounts/', include('accounts.urls')),
     path('tasks/', include('tasks.urls')),
     path('projects/', include('projects.urls')),

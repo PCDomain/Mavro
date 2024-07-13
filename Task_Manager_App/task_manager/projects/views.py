@@ -2,12 +2,21 @@
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Project
+from .models import Project, Task
+from rest_framework import viewsets
+from .serializers import TaskSerializer
 from .forms import ProjectForm
 from django.http import HttpResponse
 
+class TaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
 def index(request):
     return HttpResponse("Welcome to the Projects page!")
+
+def index(request):
+    return render(request, 'frontend/index.html')
 
 @login_required
 def project_list(request):

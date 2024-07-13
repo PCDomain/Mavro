@@ -1,14 +1,12 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
+import './Footer.css';
 
-const Footer = () => {
+function Footer() {
   return (
-    <footer className="bg-dark text-white mt-4">
-      <Container className="text-center py-3">
-        © 2024 Task Manager. All rights reserved.
-      </Container>
-    </footer>
+    <div className="footer" id="footer">
+      <p>Task Manager App &copy; 2024</p>
+    </div>
   );
-};
+}
 
 export default Footer;

@@ -1,27 +1,21 @@
 import React from 'react';
-import { Card, Button, Form } from 'react-bootstrap';
+import './TaskList.css';
 
-const TaskList = ({ tasks, startEditTask, deleteTask, toggleTaskCompletion }) => {
+function TaskList({ tasks, deleteTask, editTask }) {
   return (
-    <div className="task-list">
-      {tasks.map((task) => (
-        <Card key={task.id} style={{ marginBottom: '10px' }}>
-          <Card.Body>
-            <Form.Check
-              type="checkbox"
-              label={task.title}
-              checked={task.completed}
-              onChange={() => toggleTaskCompletion(task.id)}
-              style={{ textDecoration: task.completed ? 'line-through' : 'none' }}
-            />
-            <Card.Text>{task.description}</Card.Text>
-            <Button variant="primary" onClick={() => startEditTask(task)}>Edit</Button>
-            <Button variant="danger" style={{ marginLeft: '10px' }} onClick={() => deleteTask(task.id)}>Delete</Button>
-          </Card.Body>
-        </Card>
-      ))}
+    <div className="tasklist" id="tasklist">
+      <h2>Task List</h2>
+      <ul>
+        {tasks.map((task, index) => (
+          <li key={index}>
+            {task.task} - {task.description}
+            <button onClick={() => editTask(index)}>Edit</button>
+            <button onClick={() => deleteTask(index)}>Delete</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-};
+}
 
 export default TaskList;

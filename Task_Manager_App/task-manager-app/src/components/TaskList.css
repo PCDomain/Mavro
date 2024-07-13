@@ -1,0 +1,38 @@
+.tasklist {
+    background-color: #e9ecef;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+  
+.tasklist h2 {
+    color: #007bff;
+}
+  
+.tasklist ul {
+    list-style-type: none;
+    padding: 0;
+}
+  
+.tasklist ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #007bff;
+}
+  
+.tasklist ul li button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+  
+.tasklist ul li button:hover {
+    background-color: #0056b3;
+}
+  

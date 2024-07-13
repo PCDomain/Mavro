@@ -2,8 +2,18 @@
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Task
+from rest_framework import generics
 from .forms import TaskForm
+from .models import Task  # Ensure Task model is imported correctly
+from .serializers import TaskSerializer
+
+class TaskListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
+class TaskRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
 
 @login_required
 def task_list(request):

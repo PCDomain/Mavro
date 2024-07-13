@@ -1,68 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import './TaskForm.css';
 
-const TaskForm = ({ addTask, editTask, taskToEdit }) => {
-  const [title, setTitle] = useState('');
+function TaskForm({ addTask, editingTask }) {
+  const [task, setTask] = useState('');
   const [description, setDescription] = useState('');
-  const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
-    if (taskToEdit) {
-      setTitle(taskToEdit.title);
-      setDescription(taskToEdit.description);
-      setCompleted(taskToEdit.completed);
+    if (editingTask) {
+      setTask(editingTask.task);
+      setDescription(editingTask.description);
+    } else {
+      setTask('');
+      setDescription('');
     }
-  }, [taskToEdit]);
+  }, [editingTask]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (taskToEdit) {
-      editTask({ ...taskToEdit, title, description, completed });
-    } else {
-      addTask({ title, description, completed });
-    }
-    setTitle('');
+    addTask({ task, description });
+    setTask('');
     setDescription('');
-    setCompleted(false);
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Group controlId="formTaskTitle">
-        <Form.Label>Title</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Enter task title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </Form.Group>
-
-      <Form.Group controlId="formTaskDescription">
-        <Form.Label>Description</Form.Label>
-        <Form.Control
-          as="textarea"
-          rows={3}
-          placeholder="Enter task description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </Form.Group>
-
-      <Form.Group controlId="formTaskCompleted">
-        <Form.Check
-          type="checkbox"
-          label="Completed"
-          checked={completed}
-          onChange={(e) => setCompleted(e.target.checked)}
-        />
-      </Form.Group>
-
-      <Button variant="primary" type="submit">
-        {taskToEdit ? 'Update Task' : 'Add Task'}
-      </Button>
-    </Form>
+    <div className="taskform" id="taskform">
+      <h2>{editingTask ? 'Edit Task' : 'Task Form'}</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="task">Task:</label>
+          <input
+            type="text"
+            id="task"
+            name="task"
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="description">Description:</label>
+          <textarea
+            id="description"
+            name="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          ></textarea>
+        </div>
+        <button type="submit">{editingTask ? 'Update Task' : 'Add Task'}</button>
+      </form>
+    </div>
   );
-};
+}
 
 export default TaskForm;
