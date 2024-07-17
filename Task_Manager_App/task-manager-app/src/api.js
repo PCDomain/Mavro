@@ -1,10 +1,24 @@
+// src/api.js
 import axios from 'axios';
 
-const api = axios.create({
-  baseURL: 'http://localhost:8000/api/',
-});
+const API_URL = 'http://127.0.0.1:8000/api/tasks/';
 
-export const fetchTasks = () => api.get('tasks/');
-export const addTask = (task) => api.post('tasks/', task);
-export const deleteTask = (id) => api.delete(`tasks/${id}/`);
-export const updateTask = (id, task) => api.put(`tasks/${id}/`, task);
+export const fetchTasks = () => {
+  return axios.get(API_URL);
+};
+
+export const addTask = (task) => {
+  return axios.post('/api/tasks/', task, {
+    headers: {
+        'Content-Type': 'application/json'
+    }
+  });
+};
+
+export const updateTask = (taskId, task) => {
+  return axios.put(`${API_URL}${taskId}/`, task);
+};
+
+export const deleteTask = (taskId) => {
+  return axios.delete(`${API_URL}${taskId}/`);
+};

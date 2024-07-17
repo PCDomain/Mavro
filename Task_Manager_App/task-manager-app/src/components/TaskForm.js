@@ -1,31 +1,35 @@
 import React, { useState } from 'react';
+import { addTask } from './api';
 
-const TaskForm = ({ addTask }) => {
-  const [task, setTask] = useState('');
+const TaskForm = () => {
+    const [task, setTask] = useState({ name: '', description: '' });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (task.trim()) {
-      addTask(task);
-      setTask({ title: '' });
-    }
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await addTask(task);
+            alert('Task created successfully');
+        } catch (error) {
+            alert('There was an error creating the task!');
+        }
+    };
 
-  return (
-    <div className="task-form">
-      <div className="banner">Add Task</div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={task.title}
-          onChange={(e) => setTask({ ...task, title: e.target.value })}
-          placeholder="Enter a new task"
-          style={{ width: '100%', padding: '10px', margin: '10px 0' }}
-        />
-        <button type="submit" style={{ width: '100%' }}>Add Task</button>
-      </form>
-    </div>
-  );
+    return (
+        <form onSubmit={handleSubmit}>
+            <input
+                type="text"
+                value={task.name}
+                onChange={(e) => setTask({ ...task, name: e.target.value })}
+                placeholder="Task name"
+            />
+            <textarea
+                value={task.description}
+                onChange={(e) => setTask({ ...task, description: e.target.value })}
+                placeholder="Task description"
+            ></textarea>
+            <button type="submit">Add Task</button>
+        </form>
+    );
 };
 
 export default TaskForm;

@@ -1,32 +1,64 @@
-import React from 'react';
+// src/components/TaskList.js
+import React, { useEffect, useState } from 'react';
+import { fetchTasks, deleteTask, updateTask } from '../api'; // Use '../api' to navigate up one directory level
+import { ListGroup, ListGroupItem, Button } from 'reactstrap'; // Import from reactstrap
 
-const TaskList = ({ tasks, deleteTask, updateTask }) => {
-  const handleUpdate = (id) => {
-    const updatedTitle = prompt("Enter the new title:");
-    if (updatedTitle) {
-      updateTask(id, { title: updatedTitle });
-    }
+const TaskList = () => {
+  const [tasks, setTasks] = useState([]);
+
+  const fetchTasksFromAPI = () => {
+    fetchTasks()
+      .then(response => {
+        setTasks(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the tasks!', error);
+      });
+  };
+
+  useEffect(() => {
+    fetchTasksFromAPI();
+  }, []);
+
+  const handleDelete = (taskId) => {
+    deleteTask(taskId)
+      .then(() => {
+        fetchTasksFromAPI(); // Fetch updated tasks list after deleting a task
+      })
+      .catch(error => {
+        console.error('There was an error deleting the task!', error);
+      });
+  };
+
+  const handleToggleComplete = (task) => {
+    const updatedTask = { ...task, completed: !task.completed };
+    updateTask(task.id, updatedTask)
+      .then(() => {
+        fetchTasksFromAPI(); // Fetch updated tasks list after updating a task
+      })
+      .catch(error => {
+        console.error('There was an error updating the task!', error);
+      });
   };
 
   return (
-    <div className="task-list">
-      <div className="banner">Task List</div>
-      {tasks.length === 0 ? (
-        <p>No tasks available</p>
-      ) : (
-        <ul style={{ width: '100%' }}>
-          {tasks.map(task => (
-            <li key={task.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0' }}>
-              {task.title}
-              <div>
-                <button onClick={() => handleUpdate(task.id)}>Update</button>
-                <button onClick={() => deleteTask(task.id)}>Delete</button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <ListGroup>
+      {tasks.map(task => (
+        <ListGroupItem key={task.id}>
+          <div>
+            <input
+              type="checkbox"
+              checked={task.completed}
+              onChange={() => handleToggleComplete(task)}
+            />
+            {task.name}
+            <Button color="danger" onClick={() => handleDelete(task.id)}>
+              Delete
+            </Button>
+          </div>
+        </ListGroupItem>
+      ))}
+    </ListGroup>
   );
 };
 
