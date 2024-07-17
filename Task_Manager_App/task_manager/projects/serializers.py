@@ -1,9 +1,12 @@
-# projects/serializers.py
-
 from rest_framework import serializers
-from .models import Task
+from .models import Project, Task
+
+class ProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = '__all__'
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = '__all__'  # or specify fields explicitly
+        fields = '__all__'
